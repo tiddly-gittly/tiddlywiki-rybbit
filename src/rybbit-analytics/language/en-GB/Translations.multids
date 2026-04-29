@@ -1,0 +1,14 @@
+title: $:/plugins/linonetwo/rybbit-analytics/language/en-GB/
+
+Name: Rybbit Analytics
+Description: Inject Rybbit analytics tracking script into TiddlyWiki
+Configs/Description: Configure the Rybbit analytics integration for this wiki.
+Configs/PluginConfigs/Caption: Analytics Settings
+Configs/Enabled/Caption: Enable Tracking
+Configs/Enabled/Description: Inject the Rybbit script on page load (requires reload)
+Configs/ScriptUrl/Caption: Script URL
+Configs/ScriptUrl/Description: Full URL to the Rybbit script.js (default: cloud instance)
+Configs/SiteId/Caption: Site ID
+Configs/SiteId/Description: Numeric site ID from your Rybbit dashboard
+Configs/SkipPatterns/Caption: Skip Patterns
+Configs/SkipPatterns/Description: JSON array of URL path patterns to ignore, e.g. ["/admin/**"]

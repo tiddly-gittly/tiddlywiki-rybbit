@@ -1,0 +1,14 @@
+title: $:/plugins/linonetwo/rybbit-analytics/language/zh-Hans/
+
+Name: Rybbit 统计分析
+Description: 向 TiddlyWiki 注入 Rybbit 统计追踪脚本
+Configs/Description: 配置本 Wiki 的 Rybbit 统计集成。
+Configs/PluginConfigs/Caption: 统计设置
+Configs/Enabled/Caption: 启用追踪
+Configs/Enabled/Description: 在页面加载时注入 Rybbit 脚本（需要重新加载页面生效）
+Configs/ScriptUrl/Caption: 脚本地址
+Configs/ScriptUrl/Description: Rybbit script.js 的完整 URL（默认使用官方云服务）
+Configs/SiteId/Caption: 站点 ID
+Configs/SiteId/Description: Rybbit 后台中的数字站点 ID
+Configs/SkipPatterns/Caption: 跳过规则
+Configs/SkipPatterns/Description: 要忽略的 URL 路径规则 JSON 数组，如 ["/admin/**"]

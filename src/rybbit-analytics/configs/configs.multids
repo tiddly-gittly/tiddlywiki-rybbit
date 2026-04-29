@@ -1,0 +1,6 @@
+title: $:/plugins/linonetwo/rybbit-analytics/configs/
+
+enabled: 
+script-url: https://app.rybbit.io/api/script.js
+site-id: 
+skip-patterns: 

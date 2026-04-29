@@ -1,0 +1,26 @@
+title: $:/plugins/linonetwo/rybbit-analytics/config
+tags: $:/tags/ControlPanel/SettingsTab
+caption: <<lingo Name $:/plugins/linonetwo/rybbit-analytics/language/>>
+
+\procedure lingo-base() $:/plugins/linonetwo/rybbit-analytics/language/
+
+<<lingo Configs/Description>>
+
+---
+
+!! <<lingo Configs/PluginConfigs/Caption>>
+
+;<<lingo Configs/Enabled/Caption>>
+:<$checkbox tiddler="$:/plugins/linonetwo/rybbit-analytics/configs/enabled" field="text" checked="yes" unchecked=""> <<lingo Configs/Enabled/Description>></$checkbox>
+
+;<<lingo Configs/ScriptUrl/Caption>>
+:<<lingo Configs/ScriptUrl/Description>>
+:<$edit-text tiddler="$:/plugins/linonetwo/rybbit-analytics/configs/script-url" tag="input" class="tc-edit-texteditor" placeholder="https://app.rybbit.io/api/script.js" />
+
+;<<lingo Configs/SiteId/Caption>>
+:<<lingo Configs/SiteId/Description>>
+:<$edit-text tiddler="$:/plugins/linonetwo/rybbit-analytics/configs/site-id" tag="input" class="tc-edit-texteditor" placeholder="123" />
+
+;<<lingo Configs/SkipPatterns/Caption>>
+:<<lingo Configs/SkipPatterns/Description>>
+:<$edit-text tiddler="$:/plugins/linonetwo/rybbit-analytics/configs/skip-patterns" tag="input" class="tc-edit-texteditor" placeholder='["/admin/**"]' />

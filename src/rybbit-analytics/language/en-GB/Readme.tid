@@ -1,0 +1,5 @@
+title: $:/plugins/linonetwo/rybbit-analytics/language/en-GB/Readme
+
+\define lingo-base() $:/plugins/linonetwo/rybbit-analytics/language/en-GB/
+
+Rybbit Analytics plugin for TiddlyWiki. Injects the Rybbit tracking script into your wiki.
