@@ -2,4 +2,106 @@ title: $:/plugins/linonetwo/rybbit-analytics/language/en-GB/Readme
 
 \define lingo-base() $:/plugins/linonetwo/rybbit-analytics/language/en-GB/
 
-Rybbit Analytics plugin for TiddlyWiki. Injects the Rybbit tracking script into your wiki.
+!! Rybbit Analytics for TiddlyWiki
+
+Inject the [[Rybbit|https://rybbit.io]] open-source analytics script into your TiddlyWiki. Supports both self-hosted and cloud instances.
+
+---
+
+!!! Quick Start
+
+# Go to ''Control Panel → Plugins → Rybbit Analytics → Settings''
+# Set ''Script URL'' to your Rybbit instance, e.g. `https://analytics.example.com/api/script.js`
+# Set ''Site ID'' to the hex ID shown in your Rybbit dashboard snippet
+# Toggle ''Enable Tracking'' to `yes`
+# Reload the wiki
+
+---
+
+!!! Automatic Features (no configuration needed)
+
+When ''Enable Tracking'' is on:
+
+* ''Pageview on load'' — fires once when the wiki boots
+* ''TiddlyWiki navigation tracking'' (enabled by ''TiddlyWiki Navigation Tracking'' toggle, default ON) — fires an accurate `pageview` + `tiddler-open` custom event every time the user opens a tiddler. This is more precise than generic SPA hash-change tracking because TiddlyWiki can have multiple tiddlers open simultaneously.
+
+---
+
+!!! Widgets
+
+!!!! `<$rybbit-event>` — custom event (action widget)
+
+Use inside `<$button>` or any action sequence to track interactions.
+
+|Attribute|Type|Description|
+|`name`|string|''Required.'' Event name as shown in Rybbit|
+|`properties`|JSON string|Optional extra properties object|
+
+''Example:''
+
+```
+<$button>
+  Donate Gold
+  <$rybbit-event name="donate-click" properties='{"tier":"gold"}'/>
+</$button>
+```
+
+!!!! `<$rybbit-view>` — impression tracking (render widget)
+
+Fires once when the widget is rendered. Use to track tiddler impressions / section views.
+
+|Attribute|Type|Description|
+|`event`|string|Event name. Default: `tiddler-view`|
+|`tiddler`|string|Tiddler name attached to event. Default: `<<currentTiddler>>`|
+|`properties`|JSON string|Optional extra properties|
+
+''Example — track every tiddler that appears in story river:''
+
+```
+\widget $rybbit-auto-track()
+  <$rybbit-view tiddler=<<currentTiddler>>/>
+\end
+```
+
+Put `<<$rybbit-auto-track>>` at the top of a ViewTemplate tiddler to auto-track all tiddler views.
+
+!!!! `<$rybbit-identify>` — user identity (action widget)
+
+Associate the current session with a named user after login.
+
+|Attribute|Type|Description|
+|`user-id`|string|''Required'' (unless `clear`). Stable user identifier|
+|`traits`|JSON string|Optional user properties (name, email, plan…)|
+|`clear`|flag|Present → clear identity (use on logout)|
+
+''Login:''
+
+```
+<$rybbit-identify user-id=<<currentUser>> traits='{"plan":"pro"}'/>
+```
+
+''Logout:''
+
+```
+<$rybbit-identify clear/>
+```
+
+---
+
+!!! Skip Patterns
+
+The ''Skip Patterns'' field accepts a JSON array of glob/regex path patterns.  
+Matching tiddler paths will not be tracked.
+
+```json
+["/admin/**", "/drafts/**", "re:^/private"]
+```
+
+---
+
+!!! Self-hosted Setup
+
+# Deploy [[Rybbit|https://github.com/rybbit-io/rybbit]] with Docker
+# Add your domain to `BETTER_AUTH_TRUSTED_ORIGINS` in `.env`
+# Point ''Script URL'' to `https://your-domain.com/api/script.js`
+

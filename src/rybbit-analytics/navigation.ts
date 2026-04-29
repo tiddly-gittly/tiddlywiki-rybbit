@@ -43,6 +43,7 @@ exports.synchronous = true;
 
 exports.startup = () => {
   if (readConfig('enabled') !== 'yes') return;
+  if (readConfig('navigation-tracking') !== 'yes') return;
 
   // Patch the injected script tag to disable Rybbit's own SPA tracking,
   // since we handle navigation ourselves for accuracy.

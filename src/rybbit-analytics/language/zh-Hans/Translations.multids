@@ -12,3 +12,5 @@ Configs/SiteId/Caption: 站点 ID
 Configs/SiteId/Description: Rybbit 后台中的数字站点 ID
 Configs/SkipPatterns/Caption: 跳过规则
 Configs/SkipPatterns/Description: 要忽略的 URL 路径规则 JSON 数组，如 ["/admin/**"]
+Configs/NavigationTracking/Caption: TiddlyWiki 导航追踪
+Configs/NavigationTracking/Description: 每次用户打开 tiddler 时触发 pageview 和 tiddler-open 自定义事件，比默认 SPA 追踪更准确，推荐开启。

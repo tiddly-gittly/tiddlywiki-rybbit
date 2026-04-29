@@ -12,3 +12,5 @@ Configs/SiteId/Caption: Site ID
 Configs/SiteId/Description: Numeric site ID from your Rybbit dashboard
 Configs/SkipPatterns/Caption: Skip Patterns
 Configs/SkipPatterns/Description: JSON array of URL path patterns to ignore, e.g. ["/admin/**"]
+Configs/NavigationTracking/Caption: TiddlyWiki Navigation Tracking
+Configs/NavigationTracking/Description: Fire a pageview + tiddler-open event each time the user navigates to a tiddler. Recommended — more accurate than default SPA tracking.

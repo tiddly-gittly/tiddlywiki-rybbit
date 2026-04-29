@@ -4,3 +4,4 @@ enabled:
 script-url: https://app.rybbit.io/api/script.js
 site-id: 
 skip-patterns: 
+navigation-tracking: yes 
