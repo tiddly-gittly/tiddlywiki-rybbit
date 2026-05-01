@@ -1,0 +1,40 @@
+title: $:/plugins/linonetwo/tidgi-feature-analytics/readme
+
+!! TidGi Feature Analytics
+
+Automatically tracks coarse feature usage in the TidGi Desktop default wiki without any configuration.
+
+!! How to disable
+
+Open TidGi analytics preferences and turn off analytics, or uninstall this plugin.
+
+<$button onclick="void $tw.tidgi?.service?.window?.open('preferences',{preferenceGotoTab:'privacy'})">Open TidGi Privacy & Analytics Settings</$button>
+
+!! What is tracked
+
+;`startup` (once on boot)
+: Which plugins are installed (one boolean per plugin key) + `plugin_count`. Plugin list is dynamically enumerated from the live wiki.
+
+;`tiddler_created` / `tiddler_saved` / `tiddler_deleted`
+: Fired immediately on each operation. No title or content is included.
+
+;`search_performed`
+: Fired on each search. No query text is included.
+
+;`layout_used`
+: Fired each time the layout changes. Property `layout_plugin` contains the owning plugin slug (e.g. `linonetwo_simple_layout_launcher`).
+
+;`feature_used` (once per feature per session)
+: Property `feature` is one of: `command_palette`, `calendar`, `whiteboard`, `todolist`, `favorites`.
+
+;`active` (every 5 minutes when there is activity)
+: Heartbeat for engagement time estimation. Replaces `beforeunload` which Electron does not fire reliably on shutdown.
+
+;`wiki_stats` (once, 8-12 minutes after boot, computed in Node.js worker)
+: `user_tiddler_count`, `size_total_chars`, `size_mean_chars`, `size_median_chars`, `size_max_chars`, `size_top10_mean`, `plugin_count`. No tiddler titles or content.
+
+!! Privacy
+
+* No tiddler titles, note content, file paths, URLs, or any user-generated text is ever included.
+* All events pass through TidGi main-process privacy filter before delivery.
+* Outside TidGi Desktop the plugin does nothing silently.
