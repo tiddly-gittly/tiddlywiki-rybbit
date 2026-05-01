@@ -1,10 +1,11 @@
 import { expect, test } from '@playwright/test';
 
-test.describe('ExampleWidget', () => {
-  test('renders RandomNumber widget output on the test tiddler', async ({ page }) => {
+test.describe('rybbit-analytics plugin', () => {
+  test('plugin is installed in the wiki', async ({ page }) => {
     await page.goto('/#PlaywrightExampleWidget');
 
-    const widget = page.locator('.tc-example-widget');
-    await expect(widget).toHaveText('This is a widget! Clicks: 0');
+    const installed = page.locator('.plugin-installed').first();
+    await expect(installed).toContainText('rybbit-analytics: installed');
   });
 });
+
