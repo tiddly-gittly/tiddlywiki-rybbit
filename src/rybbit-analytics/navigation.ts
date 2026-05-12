@@ -1,3 +1,7 @@
+import { readConfig } from './utils/config';
+import { getCurrentTrackedTiddlerTitle, normalizeTrackedTiddlerTitle } from './utils/hash';
+import { sendHashPageview } from './utils/track';
+
 /**
  * Startup module: hooks TiddlyWiki's story river navigation to send
  * per-tiddler pageview events to Rybbit.
@@ -21,20 +25,29 @@ declare const exports: {
   startup: () => void;
 };
 
-declare const $tw: {
-  wiki: {
-    getTiddlerText(title: string, defaultText?: string): string | undefined;
-  };
+const RYBBIT_READY_EVENT_NAME = 'rybbit-ready';
+const SAME_TIDDLER_DEDUP_WINDOW_MS = 1500;
+
+let lastTrackedTiddler = '';
+let lastTrackedAt = 0;
+
+const trackTiddlerView = (tiddlerTitle: string, _source: 'initial-load' | 'tw-navigate' | 'hashchange') => {
+  const normalizedTiddlerTitle = normalizeTrackedTiddlerTitle(tiddlerTitle);
+  if (!normalizedTiddlerTitle) return;
+
+  const now = Date.now();
+  if (normalizedTiddlerTitle === lastTrackedTiddler && now - lastTrackedAt < SAME_TIDDLER_DEDUP_WINDOW_MS) {
+    return;
+  }
+
+  const rybbit = (window as { rybbit?: unknown }).rybbit;
+  if (!rybbit) return;
+
+  lastTrackedTiddler = normalizedTiddlerTitle;
+  lastTrackedAt = now;
+
+  void sendHashPageview(normalizedTiddlerTitle);
 };
-
-interface RybbitGlobal {
-  pageview: () => void;
-  event: (name: string, properties?: Record<string, unknown>) => void;
-}
-
-const CONFIG_PREFIX = '$:/plugins/linonetwo/rybbit-analytics/configs/';
-const readConfig = (name: string): string =>
-  ($tw.wiki.getTiddlerText(`${CONFIG_PREFIX}${name}`) ?? '').trim();
 
 exports.name = 'rybbit-analytics-navigation';
 exports.platforms = ['browser'];
@@ -45,33 +58,31 @@ exports.startup = () => {
   if (readConfig('enabled') !== 'yes') return;
   if (readConfig('navigation-tracking') !== 'yes') return;
 
-  // Patch the injected script tag to disable Rybbit's own SPA tracking,
-  // since we handle navigation ourselves for accuracy.
-  // We do this before the script executes by setting the attribute early;
-  // if the script already loaded, the flag is a no-op but our hook takes over.
-  const scriptEl = document.querySelector(
-    'script[data-site-id]',
-  ) as HTMLScriptElement | null;
-  if (scriptEl) {
-    scriptEl.setAttribute('data-auto-track-spa', 'false');
+  const trackInitialViewWhenReady = () => {
+    window.setTimeout(() => {
+      trackTiddlerView(getCurrentTrackedTiddlerTitle(), 'initial-load');
+    }, 0);
+  };
+
+  if ((window as { rybbit?: unknown }).rybbit) {
+    trackInitialViewWhenReady();
+  } else {
+    document.addEventListener(RYBBIT_READY_EVENT_NAME, trackInitialViewWhenReady, { once: true });
   }
 
-  // Listen for TiddlyWiki navigation events
   document.addEventListener('tw-navigate', (rawEvent: Event) => {
     const event = rawEvent as CustomEvent<{ navigateTo?: string }>;
-    const tiddlerTitle = event.detail?.navigateTo;
+    const tiddlerTitle = event.detail.navigateTo;
     if (!tiddlerTitle) return;
 
-    // Wait one tick so the URL hash has updated before Rybbit reads it
     setTimeout(() => {
-      const rybbit = (window as unknown as { rybbit?: RybbitGlobal }).rybbit;
-      if (!rybbit) return;
+      trackTiddlerView(tiddlerTitle, 'tw-navigate');
+    }, 0);
+  });
 
-      // Send standard pageview (uses current URL/hash)
-      rybbit.pageview();
-
-      // Also send a richer custom event with the tiddler title
-      rybbit.event('tiddler-open', { tiddler: tiddlerTitle });
+  window.addEventListener('hashchange', () => {
+    window.setTimeout(() => {
+      trackTiddlerView(getCurrentTrackedTiddlerTitle(), 'hashchange');
     }, 0);
   });
 };

@@ -5,11 +5,11 @@ Description: 向 TiddlyWiki 注入 Rybbit 统计追踪脚本
 Configs/Description: 配置本 Wiki 的 Rybbit 统计集成。
 Configs/PluginConfigs/Caption: 统计设置
 Configs/Enabled/Caption: 启用追踪
-Configs/Enabled/Description: 在页面加载时注入 Rybbit 脚本（需要重新加载页面生效）
+Configs/Enabled/Description: 默认开启。在页面加载时注入 Rybbit 脚本（需要重新加载页面生效）
 Configs/ScriptUrl/Caption: 脚本地址
-Configs/ScriptUrl/Description: Rybbit script.js 的完整 URL（默认使用官方云服务）
+Configs/ScriptUrl/Description: Rybbit script.js 的完整 URL。默认指向 analytics.tidgi.fun；同一个 Rybbit 实例下可以被多个网站共用，真正区分站点的是 Site ID。
 Configs/SiteId/Caption: 站点 ID
-Configs/SiteId/Description: Rybbit 后台中的数字站点 ID
+Configs/SiteId/Description: Rybbit 后台代码片段中的十六进制站点 ID，例如 70f361fe5d31
 Configs/SkipPatterns/Caption: 跳过规则
 Configs/SkipPatterns/Description: 要忽略的 URL 路径规则 JSON 数组，如 ["/admin/**"]
 Configs/NavigationTracking/Caption: TiddlyWiki 导航追踪

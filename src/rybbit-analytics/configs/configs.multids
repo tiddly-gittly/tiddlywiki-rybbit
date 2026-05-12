@@ -1,7 +1,7 @@
 title: $:/plugins/linonetwo/rybbit-analytics/configs/
 
-enabled: 
-script-url: https://app.rybbit.io/api/script.js
+enabled: yes
+script-url: https://analytics.tidgi.fun/api/script.js
 site-id: 
 skip-patterns: 
 navigation-tracking: yes 

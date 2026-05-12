@@ -23,7 +23,8 @@ Inject the [[Rybbit|https://rybbit.io]] open-source analytics script into your T
 When ''Enable Tracking'' is on:
 
 * ''Pageview on load'' — fires once when the wiki boots
-* ''TiddlyWiki navigation tracking'' (enabled by ''TiddlyWiki Navigation Tracking'' toggle, default ON) — fires an accurate `pageview` + `tiddler-open` custom event every time the user opens a tiddler. This is more precise than generic SPA hash-change tracking because TiddlyWiki can have multiple tiddlers open simultaneously.
+* ''TiddlyWiki navigation tracking'' (enabled by ''TiddlyWiki Navigation Tracking'' toggle, default ON) — fires an accurate `tiddler-view` custom event every time the user opens a tiddler, and a `pageview` on in-wiki navigation. This is more precise than generic SPA hash-change tracking because TiddlyWiki can have multiple tiddlers open simultaneously.
+* ''Button text click tracking'' — all `<button>`, `role="button"`, submit, and button inputs emit a `button-click` custom event with the visible button text and current tiddler title.
 
 ---
 

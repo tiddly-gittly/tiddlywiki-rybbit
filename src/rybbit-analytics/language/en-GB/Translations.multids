@@ -5,11 +5,11 @@ Description: Inject Rybbit analytics tracking script into TiddlyWiki
 Configs/Description: Configure the Rybbit analytics integration for this wiki.
 Configs/PluginConfigs/Caption: Analytics Settings
 Configs/Enabled/Caption: Enable Tracking
-Configs/Enabled/Description: Inject the Rybbit script on page load (requires reload)
+Configs/Enabled/Description: Enabled by default. Inject the Rybbit script on page load (requires reload)
 Configs/ScriptUrl/Caption: Script URL
-Configs/ScriptUrl/Description: Full URL to the Rybbit script.js (default: cloud instance)
+Configs/ScriptUrl/Description: Full URL to the Rybbit script.js. The default points to analytics.tidgi.fun and can be shared across multiple tracked sites on the same Rybbit instance.
 Configs/SiteId/Caption: Site ID
-Configs/SiteId/Description: Numeric site ID from your Rybbit dashboard
+Configs/SiteId/Description: Hex site ID from your Rybbit dashboard snippet, for example 70f361fe5d31
 Configs/SkipPatterns/Caption: Skip Patterns
 Configs/SkipPatterns/Description: JSON array of URL path patterns to ignore, e.g. ["/admin/**"]
 Configs/NavigationTracking/Caption: TiddlyWiki Navigation Tracking

@@ -1,3 +1,7 @@
+import { readConfig } from './utils/config';
+import { getAnchorUrl, getButtonText, getLinkText, isBinaryDownloadLink } from './utils/dom';
+import { getCurrentTrackedTiddlerTitle } from './utils/hash';
+
 /**
  * Startup module: injects Rybbit tracking script into the page <head> once
  * TiddlyWiki has booted, respecting the user-configured enable/disable toggle.
@@ -17,10 +21,54 @@ declare const exports: {
   startup: () => void;
 };
 
-const CONFIG_PREFIX = '$:/plugins/linonetwo/rybbit-analytics/configs/';
+interface RybbitGlobal {
+  event: (name: string, properties?: Record<string, unknown>) => void;
+}
 
-const readConfig = (name: string): string =>
-  ($tw.wiki.getTiddlerText(`${CONFIG_PREFIX}${name}`) ?? '').trim();
+const BUTTON_CLICK_EVENT_NAME = 'button-click';
+const DOWNLOAD_CLICK_EVENT_NAME = 'download-click';
+
+const trackDownloadClick = (target: EventTarget | null): void => {
+  if (!(target instanceof Element)) return;
+
+  const anchor = target.closest('a[href]');
+  if (!(anchor instanceof HTMLAnchorElement)) return;
+  if (!isBinaryDownloadLink(anchor)) return;
+
+  const rybbit = (window as unknown as { rybbit?: RybbitGlobal }).rybbit;
+  if (!rybbit?.event) return;
+
+  const url = getAnchorUrl(anchor);
+  if (!url) return;
+
+  const text = getLinkText(anchor);
+  const tiddler = getCurrentTrackedTiddlerTitle();
+  rybbit.event(DOWNLOAD_CLICK_EVENT_NAME, {
+    text: text || url.pathname.split('/').pop() || 'download',
+    href: url.pathname,
+    ...(tiddler ? { tiddler } : {}),
+  });
+};
+
+const trackButtonClick = (target: EventTarget | null): void => {
+  if (!(target instanceof Element)) return;
+
+  const clickable = target.closest('button, [role="button"], input[type="button"], input[type="submit"]');
+  if (!clickable) return;
+
+  const text = getButtonText(clickable);
+  if (!text) return;
+
+  const rybbit = (window as unknown as { rybbit?: RybbitGlobal }).rybbit;
+  if (!rybbit?.event) return;
+
+  const tiddler = getCurrentTrackedTiddlerTitle();
+  rybbit.event(BUTTON_CLICK_EVENT_NAME, {
+    text,
+    tagName: clickable.tagName.toLowerCase(),
+    ...(tiddler ? { tiddler } : {}),
+  });
+};
 
 exports.name = 'rybbit-analytics';
 exports.platforms = ['browser'];
@@ -40,7 +88,11 @@ exports.startup = () => {
   script.src = scriptUrl;
   script.async = true;
   script.defer = true;
+  script.addEventListener('load', () => {
+    document.dispatchEvent(new CustomEvent('rybbit-ready'));
+  });
   script.setAttribute('data-site-id', siteId);
+  script.setAttribute('data-auto-track-spa', 'false');
 
   const skipPatterns = readConfig('skip-patterns');
   if (skipPatterns) {
@@ -48,4 +100,9 @@ exports.startup = () => {
   }
 
   document.head.append(script);
+
+  document.addEventListener('click', (event: Event) => {
+    trackButtonClick(event.target);
+    trackDownloadClick(event.target);
+  }, true);
 };

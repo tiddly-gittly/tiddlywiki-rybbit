@@ -15,11 +15,11 @@ caption: <<lingo Name $:/plugins/linonetwo/rybbit-analytics/language/>>
 
 ;<<lingo Configs/ScriptUrl/Caption>>
 :<<lingo Configs/ScriptUrl/Description>>
-:<$edit-text tiddler="$:/plugins/linonetwo/rybbit-analytics/configs/script-url" tag="input" class="tc-edit-texteditor" placeholder="https://app.rybbit.io/api/script.js" />
+:<$edit-text tiddler="$:/plugins/linonetwo/rybbit-analytics/configs/script-url" tag="input" class="tc-edit-texteditor" placeholder="https://analytics.tidgi.fun/api/script.js" />
 
 ;<<lingo Configs/SiteId/Caption>>
 :<<lingo Configs/SiteId/Description>>
-:<$edit-text tiddler="$:/plugins/linonetwo/rybbit-analytics/configs/site-id" tag="input" class="tc-edit-texteditor" placeholder="123" />
+:<$edit-text tiddler="$:/plugins/linonetwo/rybbit-analytics/configs/site-id" tag="input" class="tc-edit-texteditor" placeholder="70f361fe5d31" />
 
 ;<<lingo Configs/SkipPatterns/Caption>>
 :<<lingo Configs/SkipPatterns/Description>>
