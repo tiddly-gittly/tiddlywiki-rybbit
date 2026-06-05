@@ -62,7 +62,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install Dependencies
-        run: pnpm install
+        run: pnpm install --allow-build=@parcel/watcher --allow-build=dprint --allow-build=esbuild --allow-build=svelte-preprocess --allow-build=unrs-resolver
 
       - name: Run tests
         run: pnpm run test
