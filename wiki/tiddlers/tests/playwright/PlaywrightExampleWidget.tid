@@ -8,6 +8,6 @@ This tiddler is used by Playwright E2E tests.
 <span class="plugin-installed">rybbit-analytics: installed</span>
 </$list>
 
-<$list filter="[[$:/plugins/linonetwo/tidgi-feature-analytics]]" emptyMessage="<span class='plugin-not-installed'>Plugin not installed</span>">
-<span class="plugin-installed">tidgi-feature-analytics: installed</span>
+<$list filter="[[$:/plugins/linonetwo/default-template-usage-analytics]]" emptyMessage="<span class='plugin-not-installed'>Plugin not installed</span>">
+<span class="plugin-installed">default-template-usage-analytics: installed</span>
 </$list>

@@ -1,5 +1,5 @@
 /**
- * Browser-side startup module for tidgi-feature-analytics.
+ * Browser-side startup module for default-template-usage-analytics.
  *
  * Instruments the TidGi Desktop default wiki automatically:
  *   - Fires one event per user action (new/save/delete tiddler, search)
@@ -26,7 +26,7 @@ declare const exports: {
 // Constants
 // ---------------------------------------------------------------------------
 
-const PLUGIN_ID = 'tidgi-feature-analytics';
+const PLUGIN_ID = 'default-template-usage-analytics';
 const HEARTBEAT_MINUTES = 5;
 
 // ---------------------------------------------------------------------------
@@ -67,7 +67,7 @@ const layoutToPluginKey = (layoutTitle: string): string => {
 // Module exports
 // ---------------------------------------------------------------------------
 
-exports.name = 'tidgi-feature-analytics-browser';
+exports.name = 'default-template-usage-analytics-browser';
 exports.platforms = ['browser'];
 exports.after = ['startup'];
 exports.synchronous = true;

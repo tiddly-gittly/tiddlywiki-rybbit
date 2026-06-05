@@ -1,6 +1,6 @@
-title: $:/plugins/linonetwo/tidgi-feature-analytics/readme
+title: $:/plugins/linonetwo/default-template-usage-analytics/readme
 
-!! TidGi Feature Analytics
+!! Default Template Usage Analytics
 
 Automatically tracks coarse feature usage in the TidGi Desktop default wiki without any configuration.
 

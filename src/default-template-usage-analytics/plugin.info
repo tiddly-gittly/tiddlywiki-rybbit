@@ -1,6 +1,6 @@
 {
-  "title": "$:/plugins/linonetwo/tidgi-feature-analytics",
-  "name": "tidgi-feature-analytics",
+  "title": "$:/plugins/linonetwo/default-template-usage-analytics",
+  "name": "default-template-usage-analytics",
   "author": "linonetwo",
   "description": "Track preset plugin feature usage in TidGi Desktop default wiki via TidGi IPC analytics bridge",
   "core-version": ">=5.1.22",

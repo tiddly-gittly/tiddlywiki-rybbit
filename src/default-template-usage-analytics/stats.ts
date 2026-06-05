@@ -1,12 +1,12 @@
 /**
- * Node.js-side startup module for tidgi-feature-analytics.
+ * Node.js-side startup module for default-template-usage-analytics.
  *
  * Computes tiddler statistics in the Node.js wiki worker (not the browser UI
  * thread) to avoid blocking rendering. Fires after a random 8-12 minute
  * delay so it does not compete with startup I/O.
  *
  * Event emitted:
- *   plugin.tidgi-feature-analytics.wiki_stats
+ *   plugin.default-template-usage-analytics.wiki_stats
  *
  * Properties:
  *   user_tiddler_count  - number of non-system, non-draft tiddlers
@@ -28,7 +28,7 @@ declare const exports: {
   startup: () => void;
 };
 
-const PLUGIN_ID = 'tidgi-feature-analytics';
+const PLUGIN_ID = 'default-template-usage-analytics';
 // Random delay between 8 and 12 minutes after boot.
 const MIN_DELAY_MS = 8 * 60 * 1000;
 const MAX_DELAY_MS = 12 * 60 * 1000;
@@ -77,7 +77,7 @@ const computeStats = (): Record<string, number> => {
   };
 };
 
-exports.name = 'tidgi-feature-analytics-stats';
+exports.name = 'default-template-usage-analytics-stats';
 exports.platforms = ['node'];
 exports.after = ['startup'];
 exports.synchronous = true;
