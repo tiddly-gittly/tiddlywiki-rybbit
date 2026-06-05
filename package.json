@@ -58,5 +58,14 @@
     "npm-check-updates": "^20.0.1",
     "tiddlywiki": "^5.3.8",
     "tiddlywiki-plugin-dev": "^0.5.7"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "dprint",
+      "esbuild",
+      "svelte-preprocess",
+      "unrs-resolver"
+    ]
   }
 }
