@@ -1,6 +1,7 @@
 import { readConfig } from './utils/config';
 import { getAnchorUrl, getButtonText, getLinkText, isBinaryDownloadLink } from './utils/dom';
 import { getCurrentTrackedTiddlerTitle } from './utils/hash';
+import { sendHashPageview } from './utils/track';
 
 /**
  * Startup module: injects Rybbit tracking script into the page <head> once
@@ -48,6 +49,10 @@ const trackDownloadClick = (target: EventTarget | null): void => {
     href: url.pathname,
     ...(tiddler ? { tiddler } : {}),
   });
+
+  if (tiddler) {
+    void sendHashPageview(tiddler);
+  }
 };
 
 const trackButtonClick = (target: EventTarget | null): void => {

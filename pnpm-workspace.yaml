@@ -1,10 +1,16 @@
 packages:
   - '.'
 
+allowBuilds:
+  '@parcel/watcher': true
+  dprint: true
+  esbuild: true
+  svelte-preprocess: set this to true or false
+  unrs-resolver: set this to true or false
+
 onlyBuiltDependencies:
   - '@parcel/watcher'
   - dprint
   - esbuild
   - svelte-preprocess
   - unrs-resolver
-

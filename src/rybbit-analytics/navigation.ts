@@ -1,5 +1,9 @@
 import { readConfig } from './utils/config';
-import { getCurrentTrackedTiddlerTitle, normalizeTrackedTiddlerTitle } from './utils/hash';
+import {
+  getCurrentTrackedTiddlerTitle,
+  getStoryFocusTiddlerTitle,
+  normalizeTrackedTiddlerTitle,
+} from './utils/hash';
 import { sendHashPageview } from './utils/track';
 
 /**
@@ -12,9 +16,8 @@ import { sendHashPageview } from './utils/track';
  *
  * This module:
  *  1. Disables Rybbit's own SPA auto-tracking (data-auto-track-spa=false on script).
- *  2. Listens to TW's internal `tw-navigate` browser event.
+ *  2. Listens to TW's internal `tm-navigate` widget event and StoryList changes.
  *  3. Sends a `pageview` for each tiddler the user navigates to.
- *  4. Optionally fires a custom `tiddler-open` event with the tiddler title.
  */
 
 declare const exports: {
@@ -27,11 +30,27 @@ declare const exports: {
 
 const RYBBIT_READY_EVENT_NAME = 'rybbit-ready';
 const SAME_TIDDLER_DEDUP_WINDOW_MS = 1500;
+const STORY_LIST_TITLE = '$:/StoryList';
+
+type NavigateEvent = {
+  navigateTo?: string;
+};
+
+type TiddlyWikiWindow = {
+  $tw?: {
+    rootWidget?: {
+      addEventListener?: (type: string, handler: (event: NavigateEvent) => void) => void;
+    };
+    wiki?: {
+      addEventListener?: (type: string, handler: (changes: Record<string, string[]>) => void) => void;
+    };
+  };
+};
 
 let lastTrackedTiddler = '';
 let lastTrackedAt = 0;
 
-const trackTiddlerView = (tiddlerTitle: string, _source: 'initial-load' | 'tw-navigate' | 'hashchange') => {
+const trackTiddlerView = (tiddlerTitle: string, _source: string) => {
   const normalizedTiddlerTitle = normalizeTrackedTiddlerTitle(tiddlerTitle);
   if (!normalizedTiddlerTitle) return;
 
@@ -40,18 +59,36 @@ const trackTiddlerView = (tiddlerTitle: string, _source: 'initial-load' | 'tw-na
     return;
   }
 
-  const rybbit = (window as { rybbit?: unknown }).rybbit;
-  if (!rybbit) return;
-
   lastTrackedTiddler = normalizedTiddlerTitle;
   lastTrackedAt = now;
-
   void sendHashPageview(normalizedTiddlerTitle);
+};
+
+const hookTiddlyWikiNavigation = () => {
+  const tw = (window as TiddlyWikiWindow).$tw;
+  if (!tw) return;
+
+  tw.rootWidget?.addEventListener?.('tm-navigate', (event) => {
+    if (!event?.navigateTo) return;
+    window.setTimeout(() => {
+      trackTiddlerView(event.navigateTo!, 'tm-navigate');
+    }, 0);
+  });
+
+  tw.wiki?.addEventListener?.('change', (changes) => {
+    if (!changes?.[STORY_LIST_TITLE]) return;
+    window.setTimeout(() => {
+      const title = getStoryFocusTiddlerTitle() || getCurrentTrackedTiddlerTitle();
+      if (title) {
+        trackTiddlerView(title, 'story-list-change');
+      }
+    }, 0);
+  });
 };
 
 exports.name = 'rybbit-analytics-navigation';
 exports.platforms = ['browser'];
-exports.after = ['rybbit-analytics']; // run after script injection
+exports.after = ['rybbit-analytics'];
 exports.synchronous = true;
 
 exports.startup = () => {
@@ -60,6 +97,7 @@ exports.startup = () => {
 
   const trackInitialViewWhenReady = () => {
     window.setTimeout(() => {
+      hookTiddlyWikiNavigation();
       trackTiddlerView(getCurrentTrackedTiddlerTitle(), 'initial-load');
     }, 0);
   };
@@ -69,16 +107,6 @@ exports.startup = () => {
   } else {
     document.addEventListener(RYBBIT_READY_EVENT_NAME, trackInitialViewWhenReady, { once: true });
   }
-
-  document.addEventListener('tw-navigate', (rawEvent: Event) => {
-    const event = rawEvent as CustomEvent<{ navigateTo?: string }>;
-    const tiddlerTitle = event.detail.navigateTo;
-    if (!tiddlerTitle) return;
-
-    setTimeout(() => {
-      trackTiddlerView(tiddlerTitle, 'tw-navigate');
-    }, 0);
-  });
 
   window.addEventListener('hashchange', () => {
     window.setTimeout(() => {
